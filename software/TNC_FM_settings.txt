@@ -1,0 +1,396 @@
+TELHIRES FALSE
+                                                                
+TELVOLT TRUE
+                                                                  
+TELTEMP TRUE
+                                                                  
+PREEMPT FALSE
+                                                                 
+DIGIID TRUE
+                                                                   
+WXPOS TRUE
+                                                                    
+TELREAD TRUE
+                                                                  
+FRAWDISP FALSE
+                                                                
+HRAWDISP FALSE
+                                                                
+WYPTXT FALSE
+                                                                  
+PKTICOM TRUE
+                                                                  
+PKTOCOM FALSE
+                                                                 
+RPATHDISP FALSE
+                                                               
+LEDS TRUE
+                                                                     
+PAVPEN FALSE
+                                                                  
+DEC96 FALSE
+                                                                   
+DDIST FALSE
+                                                                   
+HEADERLN FALSE
+                                                                
+DMETRIC FALSE
+                                                                 
+SOFTRST TRUE
+                                                                  
+MSGCMD FALSE
+                                                                  
+MSGCAP FALSE
+                                                                  
+LRNTPS FALSE
+                                                                  
+GPSCHK FALSE
+                                                                  
+INTCLK FALSE
+                                                                  
+DECSTAT FALSE
+                                                                 
+DIGIMY TRUE
+                                                                   
+TOSV TRUE
+                                                                     
+TALT TRUE
+                                                                     
+TSPEED TRUE
+                                                                   
+TIMESTAMP TRUE
+                                                                
+TIMEHMS TRUE
+                                                                  
+SBEN FALSE
+                                                                    
+TSWPT TRUE
+                                                                    
+AMODE KISS
+                                                                    
+BMODE KISS
+                                                                    
+ABAUD 19200
+                                                                   
+BBAUD 19200
+                                                                   
+BNKMODE 0
+                                                                     
+SSIDROUTE 0
+                                                                   
+ALTNET APTT4
+                                                                  
+MYCALL MYCALL
+                                                                 
+PATH1 WIDE1-1
+                                                                 
+PATH2 %
+                                                                       
+PATH3 %
+                                                                       
+TSTAT /TinyTrak4 Alpha
+                                                        
+BTEXT Beacon Text
+                               
+BPERIOD 0
+                                                                     
+TXD 30
+                                                                        
+MTXD 10
+                                                                       
+PERSIST 63
+                                                                    
+SLOTTIME 15
+                                                                   
+QUIET 10
+                                                                      
+TRNKMODE 0
+                                                                    
+CDMODE TONES
+                                                                  
+CDLEVEL 13
+                                                                    
+TXLEVEL 64
+                                                                    
+TXTWIST 50
+                                                                    
+RXAMP 10
+                                                                      
+GWAYLEN 9
+                                                                     
+GWAYMODE NMEA
+                                                                 
+GRELAYBITS 1
+                                                                  
+GRELAYRATE 0
+                                                                  
+GKRELAY 0
+                                                                     
+LOCATION 1234.5678N 12345.6789W
+                                               
+GALT 1000
+                                                                     
+TSYMCODE >
+                                                                    
+TSYMTABLE /
+                                                                   
+STATUSRATE 1
+                                                                  
+PPERIOD 0
+                                                                     
+MPPERIOD 0
+                                                                    
+SBSSPEED 5
+                                                                    
+SBFSPEED 60
+                                                                   
+SBSPERIOD 1800
+                                                                
+SBFPERIOD 90
+                                                                  
+SBTANGLE 27
+                                                                   
+SBTSLOPE 255
+                                                                  
+SBTTIME 5
+                                                                     
+MMSG 0
+                                                                        
+TSOFFSET 17
+                                                                   
+TDAO 0
+                                                                        
+TPROTOCOL MIC-E
+                                                               
+TPSWITCH 0
+                                                                    
+TPERIOD 0
+                                                                     
+TVOLTTWK 128
+                                                                  
+TTEMPTWK 128
+                                                                  
+WPERIOD 0
+                                                                     
+ALIAS1 APRSAT
+                                                                 
+ALIAS2 ARISS
+                                                                  
+ALIAS3 WIDE
+                                                                   
+DUPETIME 30
+                                                                   
+FILTERCALL %
+                                                                  
+TXFREQ 144.390
+                                                                
+RXFREQ 144.390
+                                                                
+RXSQUELCH 0
+                                                                   
+BANK 1
+                                                                        
+P300 FALSE
+                                                                    
+TXTDISP FALSE
+                                                                 
+NODISP FALSE
+                                                                  
+PPATHING FALSE
+                                                                
+DMSDISP FALSE
+                                                                 
+MICETMV FALSE
+                                                                 
+ENTS FALSE
+                                                                    
+TELHIRES FALSE
+                                                                
+TELVOLT TRUE
+                                                                  
+TELTEMP TRUE
+                                                                  
+PREEMPT FALSE
+                                                                 
+DIGIID TRUE
+                                                                   
+WXPOS TRUE
+                                                                    
+TELREAD TRUE
+                                                                  
+FRAWDISP FALSE
+                                                                
+HRAWDISP FALSE
+                                                                
+WYPTXT FALSE
+                                                                  
+PKTICOM TRUE
+                                                                  
+PKTOCOM FALSE
+                                                                 
+RPATHDISP FALSE
+                                                               
+LEDS TRUE
+                                                                     
+PAVPEN FALSE
+                                                                  
+DEC96 FALSE
+                                                                   
+DDIST FALSE
+                                                                   
+HEADERLN FALSE
+                                                                
+DMETRIC FALSE
+                                                                 
+SOFTRST TRUE
+                                                                  
+MSGCMD FALSE
+                                                                  
+MSGCAP FALSE
+                                                                  
+LRNTPS FALSE
+                                                                  
+GPSCHK FALSE
+                                                                  
+INTCLK FALSE
+                                                                  
+DECSTAT FALSE
+                                                                 
+DIGIMY FALSE
+                                                                  
+TOSV TRUE
+                                                                     
+TALT TRUE
+                                                                     
+TSPEED TRUE
+                                                                   
+TIMESTAMP TRUE
+                                                                
+TIMEHMS TRUE
+                                                                  
+SBEN FALSE
+                                                                    
+TSWPT TRUE
+                                                                    
+AMODE GPS
+                                                                     
+BMODE GPS
+                                                                     
+ABAUD 4800
+                                                                    
+BBAUD 4800
+                                                                    
+BNKMODE 0
+                                                                     
+SSIDROUTE 0
+                                                                   
+ALTNET APTT4
+                                                                  
+MYCALL NOCALL
+                                                                 
+PATH1 WIDE1-1
+                                                                 
+PATH2 WIDE2-1
+                                                                 
+PATH3 %
+                                                                       
+TSTAT /TinyTrak4 Alpha
+                                                        
+BTEXT >/TinyTrak4 Alpha
+                                                       
+BPERIOD 0
+                                                                     
+TXD 40
+                                                                        
+MTXD 10
+                                                                       
+PERSIST 65
+                                                                    
+SLOTTIME 15
+                                                                   
+QUIET 10
+                                                                      
+TRNKMODE 0
+                                                                    
+CDMODE TONES
+                                                                  
+CDLEVEL 20
+                                                                    
+TXLEVEL 128
+                                                                   
+TXTWIST 50
+                                                                    
+RXAMP 12
+                                                                      
+GWAYLEN 9
+                                                                     
+GWAYMODE NMEA
+                                                                 
+GRELAYBITS 1
+                                                                  
+GRELAYRATE 0
+                                                                  
+GKRELAY 0
+                                                                     
+LOCATION 1234.5678N 12345.6789W
+                                               
+GALT 1000
+                                                                     
+TSYMCODE >
+                                                                    
+TSYMTABLE /
+                                                                   
+STATUSRATE 1
+                                                                  
+PPERIOD 0
+                                                                     
+MPPERIOD 0
+                                                                    
+SBSSPEED 5
+                                                                    
+SBFSPEED 60
+                                                                   
+SBSPERIOD 1800
+                                                                
+SBFPERIOD 90
+                                                                  
+SBTANGLE 27
+                                                                   
+SBTSLOPE 255
+                                                                  
+SBTTIME 5
+                                                                     
+MMSG 0
+                                                                        
+TSOFFSET 17
+                                                                   
+TDAO 0
+                                                                        
+TPROTOCOL MIC-E
+                                                               
+TPSWITCH 0
+                                                                    
+TPERIOD 0
+                                                                     
+TVOLTTWK 128
+                                                                  
+TTEMPTWK 128
+                                                                  
+WPERIOD 0
+                                                                     
+ALIAS1 TEMP
+                                                                   
+ALIAS2 %
+                                                                      
+ALIAS3 %
+                                                                      
+DUPETIME 30
+                                                                   
+FILTERCALL %
+                                                                  
+TXFREQ 144.390
+                                                                
+RXFREQ 144.390
+                                                                
+RXSQUELCH 0
+ 
