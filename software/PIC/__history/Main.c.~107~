@@ -1,0 +1,86 @@
+//***************************************************************************************
+/*
+                     Digipeater APRS Competion 2023 BIRDS-X 
+                     Team ACCIMT-Sri Lanka
+                     Team Members 
+                     R.A.D.Kaveendra Sampath
+                     Thilina Rajitha Wijebandara
+
+*/
+//****************************************************************************************
+
+#include <18F46J11.h>
+#fuses NOWDT
+#use delay(crystal = 16MHz)
+#use rs232(baud=9600, parity=N, xmit=PIN_d6,rcv=pin_d7,bits=8, stream= mboss)
+char UF = 0xCC;
+#include <pic_settings.c>
+#include <Flashmem.c>
+
+char uartflag = 0;
+#include <APRS Settings.c>
+#include <Mode_Selection.c>
+
+
+
+//********************************* Basic Setting ********************************
+//
+//********************************************************************************
+
+void Setting()
+{
+   enable_interrupts(int_rda);
+   enable_interrupts(int_rda2);
+   enable_interrupts(GLOBAL);
+   delay_ms(3000);
+   
+   TRYING_TO_PUT_DIGIPETER_TO_MONITOR_MODE(10);
+   boot_Kiss_Mode(1000);
+  // TNC_Settings(2000)
+   
+   if( BYTE_READ(0x000AFFFF) != 0xFF ) SECTOR_ERASE(SNF_LOCATION,64);
+   if( BYTE_READ(0x000BFFFF) != 0xFF ) SECTOR_ERASE(DGP_LOCATION,64);
+}
+
+
+
+void main()
+{
+   Setting();
+
+   while(true)
+   {  
+
+      CHECK_UART_INCOMING_FROM_MBOSS();          // Function wrote in PIC Seeting.c
+      
+      TNC_MANUAL_SETTINGS_COMMAND();
+      
+      if(UF == 0xCC) CHECK_KISS_FRAME_DATA_AND_SAVE(50000);
+      
+      if ( (MBOSS_TO_APRS_ARRAY[0]==0xE0) && (MBOSS_TO_APRS_ARRAY[8]==0xED) ) // Frame Identification 
+      {  
+         //___________________________________________________________
+         fprintf(debug, "CMD from Mission BOSS --> "); 
+         for(int i = 0; i<9; i++)
+         {
+            fprintf(debug,"%X ", MBOSS_TO_APRS_ARRAY[i]);
+         }
+         fprintf(debug, "\n\r" );
+         //___________________________________________________________
+           
+         Digipeter_ON()             ;                     // 0x0E
+         Digipeter_OFF()            ;                     // 0xFF
+         STORE_AND_FORWARD_ON()     ;                     // 0x1E
+         DATA_TRANSFER_IN_DP_MODE() ;                     // 0x01
+         DATA_TRANSFER_IN_SNF_MODE();                     // 0x11
+         DATA_SECTORS_ERASE()       ;                     // 0x69
+         Beacon_ON()                ;                     // 0x33
+         Beacon_OFF()               ;                     // 0x88
+         
+         CLEAR_DATA_ARRAY(MBOSS_TO_APRS_ARRAY, 50); 
+      }
+      
+      
+      
+   }
+}

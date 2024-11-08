@@ -1,0 +1,910 @@
+
+
+void prnt()
+{
+   while(UART1_available())
+   {
+      fputc(UART1_READ(), debug);
+   }
+}
+
+//*************************** TNC Booting time Settings ***********************
+//
+//*****************************************************************************
+
+void boot_Kiss_Mode(int16 t1)
+{
+   UART1_flush();
+   fprintf(debug, "kiss command to TNC\n\r");
+   fprintf(TNC, "kiss\n");
+   delay_ms(t1);
+   prnt();
+}
+
+//******************************** Trying to go to Monitor Mode ***************
+//
+//*****************************************************************************
+
+void TRYING_TO_PUT_DIGIPETER_TO_MONITOR_MODE(int noftimes)
+{
+   char flagtnc = 0;
+   for( int i = 0; i<noftimes; i++)
+   {
+      fprintf(debug, "TRY = %X\n\r", i+1);
+      UART1_flush();
+      fprintf(TNC, "monitor\n");
+      delay_ms(1000);
+      
+      for(int j = 0; j<100 ;j++)
+      {
+         TNC_TO_PIC_ARRAY[j] = UART1_Read();
+      }
+      
+      
+      for(int m = 0; m<30; m++)
+      {
+         if( TNC_TO_PIC_ARRAY[m] == 0x55)
+         {
+            if( TNC_TO_PIC_ARRAY[m+29] == 0x65)
+            {
+               flagtnc = 0x69;
+               fprintf(debug, "TNC is now in Monitor mode\n\r");
+               break;
+            }
+         }
+      }
+      
+      if( flagtnc == 0x69 ) break;
+      delay_ms(2000);
+   }
+}
+
+//******************Check KISS Frame Data and Save it In Flash*****************
+//                        Digipeater Mode and S&F Mode
+//*****************************************************************************
+unsigned int32 MLC = 0;
+unsigned int16 Sec_count = 0;
+unsigned int16 header1 = 0;
+unsigned int16 footer1 = 0;
+unsigned int16 header2 = 0;
+unsigned int16 footer2 = 0;
+
+//unsigned int32 C_ADD;
+unsigned int32 LBL_D = 0; 
+unsigned int32 LBL_S = 0; 
+
+void CHECK_KISS_FRAME_DATA_AND_SAVE(unsigned int16 num)
+{
+   MLC++;
+   
+   if(MLC >=num)
+   {
+      Sec_count++;
+      fprintf(debug,"%Ld\n\r",Sec_count);
+      MLC = 0;
+      if(Sec_count>=200) Sec_count = 0;
+      
+      for(int16 i = 0; i<490; i++)
+      {
+         TNC_TO_PIC_ARRAY[i] = UART1_READ();
+      }
+      
+      for(int i = 0; i<5; i++)
+      {
+         if(TNC_TO_PIC_ARRAY[i] == 0xC0)
+         {
+            header1 = i;
+            
+            for(int j = header1+1; j<120; j++)       // 
+            {
+               if(TNC_TO_PIC_ARRAY[j] == 0xC0)
+               {
+                  footer1 = j   ;
+                  header2 = j+1 ;
+                  break;
+               }
+            }
+            
+            for(int j = header2+1; j<250; j++)
+            {
+               if(TNC_TO_PIC_ARRAY[j] == 0xC0)
+               {
+                  footer2 = j   ;
+                  break;
+               }
+            }
+            
+            if( TNC_TO_PIC_ARRAY[header1] == 0xC0 && TNC_TO_PIC_ARRAY[footer1] == 0xC0 )
+            {
+               if( Mode_Flag == 0x0D ) // Data Save IN DP Mode
+               { 
+                  unsigned int32 Location = make32( BYTE_READ(0x00000001), BYTE_READ(0x00000002), BYTE_READ(0x00000003), BYTE_READ(0x00000004) );
+                  if( location == 0xFFFFFFFF ) LBL_D = 0 ;
+                  else LBL_D = location;
+                  fprintf(Debug, "Next byte place Digipeter mode = %Lu\n\r ",location );
+                  
+                  for( unsigned int32 i = 0; i<=footer1; i++ )
+                  {
+                     BYTE_WRITE( (DGP_LOCATION + i + LBL_D) , TNC_TO_PIC_ARRAY[i] );
+                  }
+                  
+                  fprintf(debug,"Received packet Digipeter mode --> ");
+                  {
+                     for( unsigned int32 i = 0; i<=footer1; i++ )
+                     {
+                        fprintf(Debug, "%X ", BYTE_READ( (DGP_LOCATION + i + LBL_D)) );
+                     }
+                  }
+                  fprintf(debug,"\n\r");
+                  
+                  LBL_D =  LBL_D+ footer1 + 1; // next place
+                  
+                  SECTOR_ERASE(0x00000000, 4);
+                  BYTE_WRITE( 0x00000001 , (char)( (LBL_D & 0xFF000000)>>24 ) );
+                  BYTE_WRITE( 0x00000002 , (char)( (LBL_D & 0x00FF0000)>>16 ) );
+                  BYTE_WRITE( 0x00000003 , (char)( (LBL_D & 0x0000FF00)>>8  ) );
+                  BYTE_WRITE( 0x00000004 , (char)( (LBL_D & 0x000000FF)     ) );
+               }  
+                      
+               
+               if( Mode_Flag == 0x1E )  // Data Save In S&F Mode
+               { 
+                  unsigned int32 Location = make32( BYTE_READ(0x00010001), BYTE_READ(0x00010002), BYTE_READ(0x00010003), BYTE_READ(0x00010004) );
+                  if( location == 0xFFFFFFFF ) LBL_S = 0 ;
+                  else LBL_S = location;
+                  fprintf(Debug, "Next byte place S&F mode = %Lu\n\r ",location );
+                  
+                  for( unsigned int32 i = 0; i<=footer1; i++ )
+                  {
+                     BYTE_WRITE( (SNF_LOCATION + i + LBL_S) , TNC_TO_PIC_ARRAY[i] );
+                  }
+                  
+                  fprintf(debug,"Received packet S&F mode --> ");
+                  {
+                     for( unsigned int32 i = 0; i<=footer1; i++ )
+                     {
+                        fprintf(Debug, "%X ", BYTE_READ( (SNF_LOCATION + i + LBL_S)) );
+                     }
+                  }
+                  fprintf(debug,"\n\r");
+                  
+                  LBL_D =  LBL_S+ footer1 + 1; // next place
+                  
+                  SECTOR_ERASE(0x00010000, 4);
+                  BYTE_WRITE( 0x00010001 , (char)( (LBL_D & 0xFF000000)>>24 ) );
+                  BYTE_WRITE( 0x00010002 , (char)( (LBL_D & 0x00FF0000)>>16 ) );
+                  BYTE_WRITE( 0x00010003 , (char)( (LBL_D & 0x0000FF00)>>8  ) );
+                  BYTE_WRITE( 0x00010004 , (char)( (LBL_D & 0x000000FF)     ) );
+               }  
+               
+            }
+            
+            if( TNC_TO_PIC_ARRAY[header1] == 0xC0 && TNC_TO_PIC_ARRAY[footer1] == 0xC0 )
+            {
+               fprintf(debug,"Deigipeted packet --> ");
+               for(int16 i = header2; i<=footer2; i++)
+               {
+                  fprintf(Debug,"%X ", TNC_TO_PIC_ARRAY[i]);
+               }
+               fprintf(debug,"\n\r");
+            }
+            break;
+         } 
+      }
+      
+
+   }
+}
+   
+
+
+
+
+
+
+
+
+//*******************************TNC Setting **********************************
+//*****************************************************************************
+//*****************************************************************************
+
+void TNC_Settings(int16 t  )
+{
+   fprintf(debug, "config\n\r");
+   fprintf(TNC, "config");
+   delay_ms(100);
+   fputc(0x0A,TNC);
+   delay_ms(t);
+   prnt(); 
+   
+   // sets the callsign. A-Z, 0-9, 6 characters max
+   fprintf(debug, "call 4S7AC\n\r");
+   fprintf(TNC, "call 4S7AC");
+   delay_ms(100);
+   fputc(0x0A,TNC);
+   delay_ms(t);
+   prnt(); 
+   
+   // sets the SSID: 0-15
+   fprintf(debug, "ssid 0\n\r");
+   fprintf(TNC, "ssid 0");
+   delay_ms(100);
+   fputc(0x0A,TNC);
+   delay_ms(t);
+   prnt(); 
+   
+   //sets preamble length in ms: 30-2550
+   fprintf(debug, "txdelay 50\n\r");
+   fprintf(TNC, "txdelay 50");
+   delay_ms(100);
+   fputc(0x0A,TNC);
+   delay_ms(t);
+   prnt(); 
+   
+   //sets tail length in ms: 10-2550
+   fprintf(debug, "txtail 20\n\r");
+   fprintf(TNC, "txtail 20");
+   delay_ms(100);
+   fputc(0x0A,TNC);
+   delay_ms(t);
+   prnt();   
+   
+   //sets quiet time (before TX) in ms: 100-2550
+   fprintf(debug, "quiet 100\n\r");
+   fprintf(TNC, "quiet 100");
+   delay_ms(100);
+   fputc(0x0A,TNC);
+   delay_ms(t);
+   prnt();   
+          
+    
+   //sets UART1 baudrate: 1200-115200
+   fprintf(debug, "rs1baud 9600\n\r");
+   fprintf(TNC, "rs1baud 9600");
+   delay_ms(100);
+   fputc(0x0A,TNC);
+   delay_ms(t);
+   prnt(); 
+   
+   //sets UART2 baudrate: 1200-115200
+   fprintf(debug, "rs2baud 9600\n\r");
+   fprintf(TNC, "rs2baud 9600");
+   delay_ms(100);
+   fputc(0x0A,TNC);
+   delay_ms(t);
+   prnt(); 
+  
+   //sets DAC type: on for PWM, off for R2R
+   fprintf(debug,"pwm on\n\r");
+   fprintf(TNC,"pwm on");
+   delay_ms(100);
+   fputc(0x0A,TNC);
+   delay_ms(t);
+   prnt();  
+   
+   //digipeating of WIDEn-N type aliases. n and N numbers are NOT set here,
+   fprintf(debug,"digi 0 alias WIDE\n\r");
+   fprintf(TNC,"digi 0 alias WIDE");
+   delay_ms(100);
+   fputc(0x0A,TNC);
+   delay_ms(t);
+   prnt();  
+   
+   //allow paths up to WIDE1-1
+   fprintf(debug,"digi 0 max 1\n\r");
+   fprintf(TNC,"digi 0 max 1");
+   delay_ms(100);
+   fputc(0x0A,TNC);
+   delay_ms(t);
+   prnt(); 
+   
+   //no path replacement
+   fprintf(debug,"digi 0 rep 0\n\r");
+   fprintf(TNC,"digi 0 rep 0");
+   delay_ms(100);
+   fputc(0x0A,TNC);
+   delay_ms(t);
+   prnt(); 
+   
+   
+   //WIDEn-N path is traceable (digipeater callsign should be put into the path)no path replacement
+   fprintf(debug,"digi 0 trac 0\n\r");
+   fprintf(TNC,"digi 0 trac 0");
+   delay_ms(100);
+   fputc(0x0A,TNC);
+   delay_ms(t);
+   prnt(); 
+   
+   //sets duplicate protection buffer hold time in secs: 5-255
+   fprintf(debug,"digi dupe 5\n\r");
+   fprintf(TNC,"digi dupe 5");
+   delay_ms(100);
+   fputc(0x0A,TNC);
+   delay_ms(t);
+   prnt(); 
+   
+   //enable specified slot
+   fprintf(debug,"digi 0 on\n\r");
+   fprintf(TNC,"digi 0 on");
+   delay_ms(100);
+   fputc(0x0A,TNC);
+   delay_ms(t);
+   prnt();    
+   
+   //enable specified slot
+   fprintf(debug,"digi on\n\r");
+   fprintf(TNC,"digi on");
+   delay_ms(100);
+   fputc(0x0A,TNC);
+   delay_ms(t);
+   prnt();  
+   
+   //configure modem for radios with flat audio output (on) or normal output (off)
+   fprintf(debug, "flat off\n\r");
+   fprintf(TNC, "flat off");
+   delay_ms(100);
+   fputc(0x0A,TNC);
+   delay_ms(t);
+   prnt();    
+   
+      
+
+   //sets interval between selected (0-7) beacon in minutes
+   fprintf(debug, "beacon 0 iv 1\n\r");
+   fprintf(TNC, "beacon 0 iv 1");
+   delay_ms(100);
+   fputc(0x0A,TNC);
+   delay_ms(t);
+   prnt();    
+       
+   //sets delay for transmitting selected (0-7) beacon
+   fprintf(debug, "beacon 0 dl 1\n\r");
+   fprintf(TNC, "beacon 0 dl 1");
+   delay_ms(100);
+   fputc(0x0A,TNC);
+   delay_ms(t);
+   prnt(); 
+   
+   //set path for selected (0-7) beacon: 1 element (like WIDE1-1), 2 elements
+   fprintf(debug, "beacon 0 path WIDE1-1,WIDE2-2\n\r");
+   fprintf(TNC, "beacon 0 path WIDE1-1,WIDE2-2");
+   delay_ms(100);
+   fputc(0x0A,TNC);
+   delay_ms(t);
+   prnt(); 
+   
+   //on enables, off disables selected (0-7) beacon
+   fprintf(debug, "beacon 0 off\n\r");
+   fprintf(TNC, "beacon 0 off");
+   delay_ms(100);
+   fputc(0x0A,TNC);
+   delay_ms(t);
+   prnt();    
+   
+   fprintf(debug, "monkiss on\n\r");
+   fprintf(TNC, "monkiss on");
+   delay_ms(100);
+   fputc(0x0A,TNC);
+   delay_ms(t);
+   prnt(); 
+   
+   fprintf(debug, "save\n\r");
+   fprintf(TNC, "save");
+   delay_ms(100);
+   fputc(0x0A,TNC);
+   delay_ms(t);
+   prnt(); 
+   
+   fprintf(debug, "monitor\n\r");
+   fprintf(TNC, "monitor");
+   delay_ms(100);
+   fputc(0x0A,TNC);
+   delay_ms(t);
+   prnt(); 
+   
+//!   fprintf(debug, "config\n\r");
+//!   fprintf(TNC, "config\n");
+//!   delay_ms(2000);
+//!   prnt();
+//!   
+//!   fprintf(debug, "print\n\r");
+//!   fprintf(TNC, "print\n");
+//!   
+  
+  
+ 
+}
+
+
+//*************************************Digi ON*********************************
+//
+//*****************************************************************************
+
+void Digipeter_ON(int16 t=1000)
+{
+   if (MBOSS_TO_APRS_ARRAY[1]== 0x0E)
+   {
+      // Ack to mboss
+      CLEAR_DATA_ARRAY(APRS_TO_MBOSS_ARRAY,10);
+      APRS_TO_MBOSS_ARRAY[0] = 0xE0;
+      APRS_TO_MBOSS_ARRAY[1] = 0x0E;
+      APRS_TO_MBOSS_ARRAY[2] = 0xA0;
+      APRS_TO_MBOSS_ARRAY[8] = 0xED;
+      for(int i = 0; i<9; i++) fputc(APRS_TO_MBOSS_ARRAY[i], mboss);
+      
+      fprintf(debug, "Digipeater_ON command\n\r ");
+      
+      fprintf(debug, "config\n\r");
+      fprintf(TNC, "config");
+      delay_ms(100);
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();
+      
+         //enable specified slot
+      fprintf(debug,"digi 0 on\n\r");
+      fprintf(TNC,"digi 0 on");
+      delay_ms(100);
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();  
+      
+      //enable specified slot
+      fprintf(debug,"digi on\n\r");
+      fprintf(TNC,"digi on");
+      delay_ms(100);
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();
+      
+      fprintf(debug, "save\n\r");
+      fprintf(TNC, "save");
+      delay_ms(100);
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();
+      
+      fprintf(debug, "monitor\n\r");
+      fprintf(TNC, "monitor");
+      delay_ms(100);
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();
+      
+      fprintf(debug, "kiss\n\r");
+      fprintf(TNC, "kiss");
+      delay_ms(100);
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();
+      
+      Mode_Flag = 0x0D;   
+      
+      CLEAR_DATA_ARRAY(APRS_TO_MBOSS_ARRAY,10);
+      APRS_TO_MBOSS_ARRAY[0] = 0xE0;
+      APRS_TO_MBOSS_ARRAY[1] = 0x0E;
+      APRS_TO_MBOSS_ARRAY[2] = 0xA1;
+      APRS_TO_MBOSS_ARRAY[8] = 0xED;
+      for(int i = 0; i<9; i++) fputc(APRS_TO_MBOSS_ARRAY[i], mboss);
+      
+       fprintf(debug, "Digipeater_ON command_ Exicuted\n\r ");
+   }
+
+}
+
+//**********************************Digi OFF***********************************
+//
+//*****************************************************************************
+
+void Digipeter_OFF(int16 t=1000)
+{
+   if( MBOSS_TO_APRS_ARRAY[1]== 0xFF)
+   {
+      // Ack to mboss
+      CLEAR_DATA_ARRAY(APRS_TO_MBOSS_ARRAY,10);
+      APRS_TO_MBOSS_ARRAY[0] = 0xE0;
+      APRS_TO_MBOSS_ARRAY[1] = 0xFF;
+      APRS_TO_MBOSS_ARRAY[2] = 0xA0;
+      APRS_TO_MBOSS_ARRAY[8] = 0xED;
+      for(int i = 0; i<9; i++) fputc(APRS_TO_MBOSS_ARRAY[i], mboss);
+      
+      fprintf(debug, "Digipeater_OFF command\n\r ");
+      
+      fprintf(debug, "config\n\r");
+      fprintf(TNC, "config");
+      delay_ms(100);
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();
+      
+         //enable specified slot
+      fprintf(debug,"digi 0 off\n\r");
+      fprintf(TNC,"digi 0 off");
+      delay_ms(100);
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();   
+      
+      //enable specified slot
+      fprintf(debug,"digi off\n\r");
+      fprintf(TNC,"digi off");
+      delay_ms(100);
+      fputc(0x0A,TNC);     
+      delay_ms(t);
+      prnt();
+      
+      fprintf(debug, "save\n\r");
+      fprintf(TNC, "save");
+      delay_ms(100);
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();
+      
+      fprintf(debug, "monitor\n\r");
+      fprintf(TNC, "monitor");
+      delay_ms(100);
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();
+      
+      fprintf(debug, "kiss\n\r");
+      fprintf(TNC, "kiss");
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();
+      
+      Mode_Flag = 0x0E;
+      
+      
+      CLEAR_DATA_ARRAY(APRS_TO_MBOSS_ARRAY,10);
+      APRS_TO_MBOSS_ARRAY[0] = 0xE0;
+      APRS_TO_MBOSS_ARRAY[1] = 0xFF;
+      APRS_TO_MBOSS_ARRAY[2] = 0xA1;
+      APRS_TO_MBOSS_ARRAY[8] = 0xED;
+      for(int i = 0; i<9; i++) fputc(APRS_TO_MBOSS_ARRAY[i], mboss);
+      
+      fprintf(debug, "Digipeater_OFF command_Exicuted\n\r ");
+   }
+}
+
+
+//************************************ S&F ON *********************************
+//
+//*****************************************************************************
+
+void STORE_AND_FORWARD_ON(int16 t =1000)
+{
+   if( MBOSS_TO_APRS_ARRAY[1]== 0x1E)
+   {
+      // Ack to mboss
+      CLEAR_DATA_ARRAY(APRS_TO_MBOSS_ARRAY,10);
+      APRS_TO_MBOSS_ARRAY[0] = 0xE0;
+      APRS_TO_MBOSS_ARRAY[1] = 0x1E;
+      APRS_TO_MBOSS_ARRAY[2] = 0xA0;
+      APRS_TO_MBOSS_ARRAY[8] = 0xED;
+      for(int i = 0; i<9; i++) fputc(APRS_TO_MBOSS_ARRAY[i], mboss);
+      
+      fprintf(debug, "Store and forward on command\n\r ");
+      
+      fprintf(debug, "config\n\r");
+      fprintf(TNC, "config");
+      delay_ms(100);
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();
+      
+         //enable specified slot
+      fprintf(debug,"digi 0 off\n\r");
+      fprintf(TNC,"digi 0 off");
+      delay_ms(100);
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();   
+      
+      //enable specified slot
+      fprintf(debug,"digi off\n\r");
+      fprintf(TNC,"digi off");
+      delay_ms(100);
+      fputc(0x0A,TNC);     
+      delay_ms(t);
+      prnt();
+      
+      fprintf(debug, "save\n\r");
+      fprintf(TNC, "save");
+      delay_ms(100);
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();
+      
+      fprintf(debug, "monitor\n\r");
+      fprintf(TNC, "monitor");
+      delay_ms(100);
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();
+      
+      fprintf(debug, "kiss\n\r");
+      fprintf(TNC, "kiss");
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();
+      
+      Mode_Flag = 0x1E;
+      
+      CLEAR_DATA_ARRAY(APRS_TO_MBOSS_ARRAY,10);
+      APRS_TO_MBOSS_ARRAY[0] = 0xE0;
+      APRS_TO_MBOSS_ARRAY[1] = 0x1E;
+      APRS_TO_MBOSS_ARRAY[2] = 0xA1;
+      APRS_TO_MBOSS_ARRAY[8] = 0xED;
+      for(int i = 0; i<9; i++) fputc(APRS_TO_MBOSS_ARRAY[i], mboss);
+      
+      fprintf(debug, "Store and forward on command_Exicuted\n\r ");
+   }
+}
+
+
+//************************ DATA Transfer In DP MODE ***************************
+//
+//*****************************************************************************
+
+
+Void DATA_TRANSFER_IN_DP_MODE()
+{
+   if( MBOSS_TO_APRS_ARRAY[1]== 0x01)
+   {
+      fprintf(debug, "DATA_TRANSFER_IN_DP_MODE\n\r ");
+      
+      unsigned int Nofpackets = make16(MBOSS_TO_APRS_ARRAY[6],MBOSS_TO_APRS_ARRAY[7]);
+      
+      for(unsigned int32 i = 0; i< Nofpackets; i++)
+      {
+         APRS_TO_MBOSS_ARRAY[0] = 0xE0;
+         APRS_TO_MBOSS_ARRAY[1] = 0x01;
+         APRS_TO_MBOSS_ARRAY[2] = (unsigned int8)(i+1) ;
+         
+         for(unsigned int32 j = 0; j<81; j++)
+         {
+            APRS_TO_MBOSS_ARRAY[3+j] = BYTE_READ(DGP_LOCATION + j + 81*i);
+         }
+         APRS_TO_MBOSS_ARRAY[84] = 0xED ;
+         
+         for(int i=0; i<=84; i++) fputc(APRS_TO_MBOSS_ARRAY[i], mboss);
+         
+         Delay_ms(250);
+      }
+   }
+}
+
+
+//***************************DATA Transfer IN S&F MODE*************************
+//
+//*****************************************************************************
+
+
+Void DATA_TRANSFER_IN_SNF_MODE()
+{
+   if( MBOSS_TO_APRS_ARRAY[1]== 0x11)
+   {
+      fprintf(debug, "DATA_TRANSFER_IN_SNF_MODE\n\r ");
+      
+      unsigned int Nofpackets = make16(MBOSS_TO_APRS_ARRAY[6],MBOSS_TO_APRS_ARRAY[7]);
+      
+      for(unsigned int32 i = 0; i< Nofpackets; i++)
+      {
+         APRS_TO_MBOSS_ARRAY[0] = 0xE0;
+         APRS_TO_MBOSS_ARRAY[1] = 0x01;
+         APRS_TO_MBOSS_ARRAY[2] = (unsigned int8)(i+1) ;
+         
+         for(unsigned int32 j = 0; j<81; j++)
+         {
+            APRS_TO_MBOSS_ARRAY[3+j] = BYTE_READ(SNF_LOCATION + j + 81*i);
+         }
+         APRS_TO_MBOSS_ARRAY[84] = 0xED ;
+         
+         for(int i=0; i<=84; i++) fputc(APRS_TO_MBOSS_ARRAY[i], mboss);
+         
+         Delay_ms(250);
+      }
+   }
+}
+
+//********************************** Beacon ON ********************************
+//
+//*****************************************************************************
+void Beacon_ON(int16 t=1000)
+{
+   if (MBOSS_TO_APRS_ARRAY[1]== 0x33)
+   {
+      // Ack to mboss
+      CLEAR_DATA_ARRAY(APRS_TO_MBOSS_ARRAY,10);
+      APRS_TO_MBOSS_ARRAY[0] = 0xE0;
+      APRS_TO_MBOSS_ARRAY[1] = 0x33;
+      APRS_TO_MBOSS_ARRAY[2] = 0xA0;
+      APRS_TO_MBOSS_ARRAY[8] = 0xED;
+      for(int i = 0; i<9; i++) fputc(APRS_TO_MBOSS_ARRAY[i], mboss);
+      
+      fprintf(debug, "Beacon_ON command\n\r ");
+      
+      
+      fprintf(debug, "config\n\r");
+      fprintf(TNC, "config");
+      delay_ms(100);
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();     
+     
+      //on enables, off disables selected (0-7) beacon
+      fprintf(debug, "beacon 0 on\n\r");
+      fprintf(TNC, "beacon 0 on");
+      delay_ms(100);
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();
+      
+      fprintf(debug, "save\n\r");
+      fprintf(TNC, "save");
+      delay_ms(100);
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();
+      
+      fprintf(debug, "monitor\n\r");
+      fprintf(TNC, "monitor");
+      delay_ms(100);
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();
+      
+      fprintf(debug, "kiss\n\r");
+      fprintf(TNC, "kiss");
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();     
+      Mode_Flag = 0x33;   
+      
+      CLEAR_DATA_ARRAY(APRS_TO_MBOSS_ARRAY,10);
+      APRS_TO_MBOSS_ARRAY[0] = 0xE0;
+      APRS_TO_MBOSS_ARRAY[1] = 0x33;
+      APRS_TO_MBOSS_ARRAY[2] = 0xA1;
+      APRS_TO_MBOSS_ARRAY[8] = 0xED;
+      for(int i = 0; i<9; i++) fputc(APRS_TO_MBOSS_ARRAY[i], mboss);
+      
+       fprintf(debug, "Beacon_ON command_ Exicuted\n\r ");
+   }
+
+}
+
+
+
+//********************************** Beacon OFF *******************************
+//
+//*****************************************************************************
+void Beacon_OFF(int16 t=1000)
+{
+   if (MBOSS_TO_APRS_ARRAY[1]== 0x88)
+   {
+      // Ack to mboss
+      CLEAR_DATA_ARRAY(APRS_TO_MBOSS_ARRAY,10);
+      APRS_TO_MBOSS_ARRAY[0] = 0xE0;
+      APRS_TO_MBOSS_ARRAY[1] = 0x88;
+      APRS_TO_MBOSS_ARRAY[2] = 0xA0;
+      APRS_TO_MBOSS_ARRAY[8] = 0xED;
+      for(int i = 0; i<9; i++) fputc(APRS_TO_MBOSS_ARRAY[i], mboss);
+      
+      fprintf(debug, "Beacon_OFF command\n\r ");
+      
+      fprintf(debug, "config\n\r");
+      fprintf(TNC, "config");
+      delay_ms(100);
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();      
+           
+      //on enables, off disables selected (0-7) beacon
+      fprintf(debug, "beacon 0 off\n\r");
+      fprintf(TNC, "beacon 0 off");
+      delay_ms(100);
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();  
+   
+      fprintf(debug, "save\n\r");
+      fprintf(TNC, "save");
+      delay_ms(100);
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();
+      
+      fprintf(debug, "monitor\n\r");
+      fprintf(TNC, "monitor");
+      delay_ms(100);
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();
+      
+      fprintf(debug, "kiss\n\r");
+      fprintf(TNC, "kiss");
+      fputc(0x0A,TNC);
+      delay_ms(t);
+      prnt();     
+      Mode_Flag = 0x88;   
+      
+      CLEAR_DATA_ARRAY(APRS_TO_MBOSS_ARRAY,10);
+      APRS_TO_MBOSS_ARRAY[0] = 0xE0;
+      APRS_TO_MBOSS_ARRAY[1] = 0x88;
+      APRS_TO_MBOSS_ARRAY[2] = 0xA1;
+      APRS_TO_MBOSS_ARRAY[8] = 0xED;
+      for(int i = 0; i<9; i++) fputc(APRS_TO_MBOSS_ARRAY[i], mboss);
+      
+       fprintf(debug, "Beacon_OFF command_ Exicuted\n\r ");
+   }
+
+}
+
+
+
+
+//****************************Data Sector Erase********************************
+//
+//*****************************************************************************
+
+Void DATA_SECTORS_ERASE()
+{
+   if( MBOSS_TO_APRS_ARRAY[1]== 0x69)
+   {
+         // Ack to mboss
+      CLEAR_DATA_ARRAY(APRS_TO_MBOSS_ARRAY,10);
+      APRS_TO_MBOSS_ARRAY[0] = 0xE0;
+      APRS_TO_MBOSS_ARRAY[1] = 0x69;
+      APRS_TO_MBOSS_ARRAY[2] = 0xA0;
+      APRS_TO_MBOSS_ARRAY[8] = 0xED;
+      for(int i = 0; i<9; i++) fputc(APRS_TO_MBOSS_ARRAY[i], mboss);
+      
+ //     fprintf(debug, "DATA_SECTORS_ERASE\n\r ");
+      
+      SECTOR_ERASE(SNF_LOCATION,64, 1500);
+      SECTOR_ERASE(DGP_LOCATION,64, 1500);
+      SECTOR_ERASE(0x00000000,64, 1500);
+      SECTOR_ERASE(0x00010000,64, 1500);
+      fprintf(debug, "Sectors erased\n\r ");
+      
+      
+      CLEAR_DATA_ARRAY(APRS_TO_MBOSS_ARRAY,10);
+      APRS_TO_MBOSS_ARRAY[0] = 0xE0;
+      APRS_TO_MBOSS_ARRAY[1] = 0x69;
+      APRS_TO_MBOSS_ARRAY[2] = 0xA1;
+      APRS_TO_MBOSS_ARRAY[8] = 0xED;
+      for(int i = 0; i<9; i++) fputc(APRS_TO_MBOSS_ARRAY[i], mboss);
+      
+       fprintf(debug, "Data_Secters_Erase_ Exicuted\n\r ");
+   }
+}
+//*****************************************************************************
+// *************************** Manual Setting *********************************
+//*****************************************************************************
+
+
+void Manual_Settings()
+{
+   fprintf(debug, "command -->> ");
+   for(int i = 0; i<UART2_Byte_Counter; i++)
+   {
+      fputc(UART2_Buffer[i], debug);
+   }
+   
+   
+      fputc(0x0A, debug); // 0x0A Represent Enter in ACII or  \n
+      fputc(0x0D, debug); // 0x0D Represent Carriage Return in Ascii or  \r
+      
+      
+   for(int i = 0; i<UART2_Byte_Counter-1; i++)
+   {
+      fputc(UART2_Buffer[i], TNC);
+      UART2_Buffer[i] = 0;
+   }
+   fputc(0x0A, TNC);
+   
+   UART2_Byte_Counter = 0;
+   uartflag = 0 ;
+}
+
