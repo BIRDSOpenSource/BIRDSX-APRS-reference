@@ -1,0 +1,18 @@
+Minutes of meeting with Edgar (BIRDS-5)
+2023/06/08 12:30 - 13:00 JST 
+
+Evaluation of APRS payloads for competition
+-Digipeating capability of the APRS payloads can be used for uplink and downlink evaluation process. If the payload is able to receive (uplink from Ground) the APRS packets incoming it must be able to transmit all the packets (downlink from satellite).
+
+-Beacon transmission from APRS payloads can be used for transmission capability evaluation.
+
+-Process to uplink through UHF control data and storage in the APRS payloads FM to transmission evaluation could be risky since transfer process from OBC to APRS payloads can fail. The inverse process (tranfer from APRS payloads to OBC SFM) can be used for data transfer evaluation between APRS payloads and OBC.
+
+Evaluation criteria
+
+Minimun:  Beacon received and decoded by ground stations or ground terminals
+Medium:  APRS messages successfully digipeating (uplink + downlink)
+Full: APRS messages stored on payload FM is successfully tranfered to the OBC SFM and downloaded via UHF
+
+Selection of crystals for APRS reference #1 & APRS reference #2
+- According to Edgar there are no issues about the changing the 8 MHz crystal from Fox Electronics to an analog one since BIRDS-5 used a different crystal from BIRDS-4, but this it will be confirmed. It was recommended to check crystal availability used from BIRDS-4 since is an valid alternative as used in BIRDS-5. 
