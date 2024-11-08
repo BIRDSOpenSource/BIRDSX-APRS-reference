@@ -1,0 +1,25 @@
+>>> Warning 208 "E:\SF-WARD FM BIRDS4&5\BIRDS5 SFWARD FINAL UPLOADED\BIRDS5 FM V3\SFward_AX25_v2.h" Line 305(6,15): Function not void and does not return a value  send_APRS
+>>> Warning 230 "SFward_FM_Code_v9.c" Line 78(117,118): String truncated
+>>> Warning 230 "SFward_FM_Code_v9.c" Line 78(136,137): String truncated
+>>> Warning 204 "SFward_FM_Code_v9.c" Line 455(1,1): Condition always FALSE
+>>> Warning 216 "SFward_FM_Code_v9.c" Line 901(1,2): Interrupts disabled during call to prevent re-entrancy:  (@PSTRINGCN_836)
+>>> Warning 216 "SFward_FM_Code_v9.c" Line 901(1,2): Interrupts disabled during call to prevent re-entrancy:  (@PRINTF_X_836)
+>>> Warning 216 "SFward_FM_Code_v9.c" Line 901(1,2): Interrupts disabled during call to prevent re-entrancy:  (@PUTCHAR_3_)
+>>> Warning 216 "SFward_FM_Code_v9.c" Line 901(1,2): Interrupts disabled during call to prevent re-entrancy:  (@PSTRINGC_836)
+>>> Warning 216 "SFward_FM_Code_v9.c" Line 901(1,2): Interrupts disabled during call to prevent re-entrancy:  (@PRINTF_U_836)
+>>> Warning 216 "SFward_FM_Code_v9.c" Line 901(1,2): Interrupts disabled during call to prevent re-entrancy:  (@DIV88)
+>>> Warning 216 "SFward_FM_Code_v9.c" Line 901(1,2): Interrupts disabled during call to prevent re-entrancy:  (@GETCH_BIU_2)
+>>> Warning 202 "E:\SF-WARD FM BIRDS4&5\BIRDS5 SFWARD FINAL UPLOADED\BIRDS5 FM V3\SFward_AX25_v2.h" Line 60(15,31): Variable never used:   TX_KISSframe_len
+>>> Warning 202 "E:\SF-WARD FM BIRDS4&5\BIRDS5 SFWARD FINAL UPLOADED\BIRDS5 FM V3\SFward_AX25_v2.h" Line 61(15,27): Variable never used:   TX_KISSframe
+>>> Warning 202 "E:\SF-WARD FM BIRDS4&5\BIRDS5 SFWARD FINAL UPLOADED\BIRDS5 FM V3\SFward_AX25_v2.h" Line 62(15,28): Variable never used:   TX_packet_len
+>>> Warning 202 "E:\SF-WARD FM BIRDS4&5\BIRDS5 SFWARD FINAL UPLOADED\BIRDS5 FM V3\SFward_AX25_v2.h" Line 63(15,24): Variable never used:   TX_packet
+>>> Warning 202 "E:\SF-WARD FM BIRDS4&5\BIRDS5 SFWARD FINAL UPLOADED\BIRDS5 FM V3\SFward_AX25_v2.h" Line 65(15,27): Variable never used:   TX_SSID_dest
+>>> Warning 202 "E:\SF-WARD FM BIRDS4&5\BIRDS5 SFWARD FINAL UPLOADED\BIRDS5 FM V3\SFward_AX25_v2.h" Line 67(15,29): Variable never used:   TX_SSID_source
+>>> Warning 202 "E:\SF-WARD FM BIRDS4&5\BIRDS5 SFWARD FINAL UPLOADED\BIRDS5 FM V3\SFward_AX25_v2.h" Line 68(15,25): Variable never used:   TX_control
+>>> Warning 202 "E:\SF-WARD FM BIRDS4&5\BIRDS5 SFWARD FINAL UPLOADED\BIRDS5 FM V3\SFward_AX25_v2.h" Line 69(15,21): Variable never used:   TX_PID
+>>> Warning 202 "SFward_FM_Code_v9.c" Line 335(9,18): Variable never used:   counterFF
+>>> Warning 202 "SFward_FM_Code_v9.c" Line 787(19,42): Variable never used:   numberofreceivedpackets
+>>> Warning 202 "SFward_FM_Code_v9.c" Line 790(24,38): Variable never used:   parsing_result
+      Memory usage:   ROM=23%      RAM=88% - 90%
+      0 Errors,  22 Warnings.
+Build Successful.

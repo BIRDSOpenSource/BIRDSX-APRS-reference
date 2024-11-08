@@ -1,0 +1,217 @@
+
+ROM used:   30382/131056 (23%)
+            30382/131056 (23%) including unused fragments
+
+            4.3 Average locations per line
+            21.4 Average locations per statement
+
+RAM used:   3159/3578 (88%) at main() level
+            3233/3578 (90%) worst case
+
+Stack used: 8 worst case (5 in main + 3 for interrupts)
+Stack size: 31
+
+Lines Stmts  %   Files
+----- ----- ---  -----
+  904   449  32  SFward_FM_Code_v9.c
+  667   368  26  SFward_FM_Code_v3.h
+ 1420     0   0  C:\Program Files (x86)\PICC\Devices\18F67J94.h
+  435   129   9  C:\Program Files (x86)\PICC\Drivers\String.h
+   32     0   0  C:\Program Files (x86)\PICC\Drivers\stddef.h
+   28     0   0  C:\Program Files (x86)\PICC\Drivers\ctype.h
+  335   129   9  C:\Program Files (x86)\PICC\Drivers\stdlibm.h
+   76    13   1  C:\Program Files (x86)\PICC\Drivers\memmgmt.c
+ 2227   257  18  C:\Program Files (x86)\PICC\Drivers\math.h
+  367    74   5  SFward_AX25_v2.h
+  163     0   0  C:\Program Files (x86)\PICC\Drivers\stdint.h
+   37     0   0  C:\Program Files (x86)\PICC\Drivers\stdio.h
+  435     0   0  C:\Program Files (x86)\PICC\Drivers\string.h
+----- -----
+ 7126  1419 Total
+
+Page ROM  %  RAM    Vol Diff  Functions:
+---- --- --- ---    --- ----  ----------
+0     40   0    1             @delay_ms1
+0     36   0    1             @delay_us1
+0     60   0    5             @SPI_XFER_1
+0     12   0    0             @PUTCHARI_BIU_1
+0     68   0    2             @GETCH_BIU_1
+0     12   0    0             @PUTCHARI_BIU_2
+0     74   0    3             @GETCH_BIU_2
+0     70   0    1             @PUTCHAR_3_
+0     58   0    8     53  2.6  adrs2subsector4kb
+0     56   0    1    163  2.7  isBusy
+0     76   0    1    190  2.7  ReadSR
+0     38   0    0    114  2.5  ENABLE_4BYTES_ADDRESS
+0     36   0    0    114  2.5  WRITE_ENABLE4
+0     36   0    0    114  2.5  WRITE_DISABLE4
+0     30   0    0             @const854
+0     48   0    4             @PSTRINGCN_836
+0     70   0    2             @PRINTF_X_836
+0     30   0    0             @const863
+0     32   0    0             @const867
+0    320   1   13    867  5.5  SUBSECTOR_4KB_ERASE4
+0     32   0    0             @const871
+0     24   0    0             @const877
+0    148   0   13             @DIV3232
+0    210   0   12             @PRINTF_L32U_836
+0    146   0   14    864  5.7  WRITE_DATA_BYTE4
+0    130   0   14    798  5.7  READ_DATA_BYTE4
+0   1332   2   34   3413 11.7  WRITE_DATA_N_BYTE4
+0     42   0    0             @const905
+0   1036   2   32   3321 11.7  WRITE_DATA_N_DUMMY_BYTE4
+0     14   0    0             @const927
+0     32   0    1             @SPRINTF
+0     40   0    3             @PSTRINGC_836
+0     42   0    0             @const939
+0     12   0    0             @const945
+0    214   0    9             @PRINTF_LU_836
+0     14   0    0             @const949
+0     32   0    0             @const951
+0     28   0    0             @const952
+0     30   0    0             @const953
+0     22   0    0             @const954
+0     44   0    3             @DIV88
+0    124   0    2             @PRINTF_U_836
+0     20   0    0             @const961
+0     34   0    0             @const962
+0     72   0    0             @const963
+0     28   0    0             @const965
+0     30   0    0             @const966
+0    116   0    9    290  6.0  strcat
+0    132   0   11    369  8.0  memcmp
+0    150   0    7    354  9.4  strncmp
+0     62   0    5    140  5.0  strlen
+0     34   0    5             @MUL1616
+0    846   1   20   1121 10.1  CEIL_FLOOR
+0    122   0   10             @FLT
+0     60   0    4             @SFTOI
+0     54   0    2             @ITOF
+0    246   0   11             @MULFF
+0    632   1   16             @ADDFF
+0     28   0    4     43  2.1  floor
+0     30   0    4     44  1.9  ceil
+0    356   1   16    259  6.9  fmod
+0    350   1   14             @DIVFF
+0   1036   2   22   1071  8.0  exp
+0     80   0    2             @SITOF
+0    912   2   25    979 10.0  log
+0    780   1   12    556  7.5  pow
+0    438   1   15   1240 14.5  KISSframe_to_AX25packet
+0   1406   2   15   2033  8.0  parse_received_packet
+0     24   0    0             @const1322
+0     50   0    2             @PSTRINGR_836
+0     18   0    0             @const1324
+0     26   0    0             @const1325
+0     22   0    0             @const1326
+0     18   0    0             @const1327
+0     14   0    0             @const1328
+0     22   0    0             @const1329
+0    268   0    9             @PRINTF_LD_836
+0     30   0    0             @const1332
+0     28   0    0             @const1333
+0     22   0    0             @const1335
+0     40   0    0             @const1337
+0     24   0    0             @const1338
+0    540   1   23   1557  6.0  send_APRS
+0     16   0    0             @const1348
+0    154   0    2             @PRINTF_U_928
+0    102   0    4    209  4.0  rxAPRS
+0    216   0    2    490  5.1  rxMB
+0     22   0    0             @const1403
+0     60   0    0             @const1404
+0     30   0    0             @const1405
+0     80   0    0     90  1.9  write_satellite_info
+0     26   0    0             @const1407
+0    192   0    8    108  2.0  prepare_DummyData
+0     94   0   14             @MUL3232
+0     60   0    0             @const1413
+0    602   1    8    635  6.6  show_FM_data
+0     34   0    0             @const1415
+0    110   0    1     70  1.6  sendACKtoMB
+0     26   0    0             @const1421
+0    452   1   19    474  6.2  executeE0Command
+0      6   0    0             @const1426
+0     36   0    0             @const1430
+0    378   1    4    428  4.3  show_SFward_info_array
+0     30   0    0             @const1434
+0     28   0    0             @const1435
+0    454   1   21    841  6.9  write_log_entery_FM
+0     46   0    0             @const1444
+0   1012   2    8   1712  6.9  update_SFward_info_array_RAM
+0     20   0    0             @const1450
+0     34   0    0             @const1451
+0     56   0    0             @const1452
+0    982   2   17   1532  9.6  prepare_SFwardData
+0     36   0    0             @const1455
+0     10   0    0             @const1459
+0      4   0    0      5  1.0  sendAckVHF
+0    692   1   11    751  7.7  is_sent_to_me
+0     86   0    3    193  4.0  is_valid_SFward
+0   1910   3   11   3488 10.7  write_SFwad_data_toFM
+0     48   0    0             @const1470
+0     26   0    0             @const1471
+0     20   0    0             @const1472
+0   1092   2   13   1467  7.3  save_rcved_data_in_FM
+0     22   0    0             @const1476
+0     50   0    0             @const1478
+0     22   0    0             @const1479
+0    148   0    1    290  2.7  reset_SFward_FM_data
+0     56   0    0             @const1483
+0    506   1    1   1049  2.9  reset_all
+0     18   0    0             @const1485
+0     28   0    0             @const1486
+0    934   2    4    957  4.8  settings
+0      6   0    0             @const1488
+0     36   0    0             @const1489
+0     18   0    0             @const1490
+0     56   0    0             @const1491
+0     28   0    0             @const1492
+0     40   0    0             @const1493
+0   4186   7  511   8577 11.7  MAIN
+0     52   0    0             @const1500
+0     54   0    0             @const1501
+0     36   0    0             @const1502
+0     30   0    0             @const1511
+0     30   0    0             @const1512
+0     54   0    0             @const1513
+0     32   0    0             @const1514
+0     18   0    0             @const1517
+0     70   0    2             @PRINTF_X_928
+0      6   0    0             @const1525
+0      6   0    0             @const1526
+0     14   0    0             @const1527
+0     16   0    0             @const1528
+0     14   0    0             @const1529
+0     16   0    0             @const1530
+0     24   0    0             @const1531
+0      4   0    0             @const1533
+0     24   0    0             @const1534
+0      4   0    0             @const1536
+0     38   0    0             @const1541
+0     20   0    0             @const1547
+0     34   0    0             @const1550
+ Inline         0             @cinit1
+
+Program metrics:
+    Functions               45
+    Statements              1419
+    Comments                1282
+    Volume (V)              73732
+    Difficulty (D)          259.0
+    Effort to implement (E) 19093187
+    Time to implement (T)   294 hours, 39 minutes
+    Est Delivered Bugs (B)  24
+    Cyclomatic Complexity   121
+    Maintainability (MI)    122
+
+ Segment     Used  Free
+-----------  ----  ----
+00000-00004     6  0  
+00006-00006     0  2  
+00008-000C8   194  0  
+000CA-0FFFE  30182  35152  
+10000-1FFEE     0  65520  
+
+
+
