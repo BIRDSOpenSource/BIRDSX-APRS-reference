@@ -1,0 +1,168 @@
+
+ROM used:   10232/131056 (8%)
+            10232/131056 (8%) including unused fragments
+
+            3.8 Average locations per line
+            17.2 Average locations per statement
+
+RAM used:   1493/3578 (42%) at main() level
+            1556/3578 (43%) worst case
+
+Stack used: 5 worst case (3 in main + 2 for interrupts)
+Stack size: 31
+
+Lines Stmts  %   Files
+----- ----- ---  -----
+   95    37   6  Main.c
+ 1487     0   0  C:\Program Files (x86)\PICC\Devices\18F67J94.h
+  223    85  14  pic_settings.c
+  106    52   9  Flashmem.c
+  755   422  71  APRS Settings.c
+----- -----
+ 2666   596 Total
+
+Page ROM  %  RAM    Vol Diff  Functions:
+---- --- --- ---    --- ----  ----------
+0     42   0    1             @delay_ms1
+0     70   0    1             @PUTCHAR_1_
+0     74   0    1             @GETCH_1_
+0      8   0    0             @PUTCHARI_BIU_2
+0     26   0    0             @GETCH_BIU_2
+0     70   0    4    114  3.8  SERIAL_ISR1
+0     12   0    0     13  1.0  UART1_Available
+0     56   0    0    245  5.0  UART1_Read
+0     68   0    1             @PUTCHAR_3_
+0     72   0    1             @GETCH_3_
+0     80   0    4    114  3.8  SERIAL_ISR2
+0     32   0    0     56  2.3  UART2_Available
+0     76   0    0    245  5.0  UART2_Read
+0    376   2    6   1148  6.5  TNC_MANUAL_SETTINGS_COMMAND
+0     20   0    0             @const992
+0     40   0    3             @PSTRINGC_981
+0     16   0    0             @const999
+0     48   0    4             @PSTRINGCN_981
+0     70   0    2             @PRINTF_X_981
+0     16   0    0             @const1005
+0    158   1   10    359  5.3  CHECK_UART_INCOMING_FROM_MBOSS
+0     32   0    6    133  3.3  CLEAR_DATA_ARRAY
+0     60   0    6             @SPI_XFER_1
+0     28   0    0     69  1.9  WRITE_ENABLE
+0    244   1   16   1014  6.0  SECTOR_ERASE
+0    166   1   16    774  5.2  BYTE_WRITE
+0    176   1   18    762  5.2  BYTE_READ
+0     22   0    0             @const1040
+0      6   0    0             @const1041
+0     12   0    0             @const1047
+0     10   0    0             @const1048
+0     30   0    0             @const1051
+0   2838  14   42   5263 10.2  CHECK_KISS_FRAME_DATA_AND_SAVE
+0    256   1    9             @PRINTF_LD_981
+0     22   0    0             @const1070
+0     42   0    0             @const1071
+0    148   1   13             @DIV3232
+0    196   1   12             @PRINTF_L32U_981
+0     36   0    0             @const1078
+0     22   0    0             @const1083
+0     42   0    0             @const1084
+0     30   0    0             @const1086
+0     24   0    0             @const1090
+0     10   0    0             @const1096
+0      8   0    0             @const1097
+0     14   0    0             @const1098
+0     12   0    0             @const1099
+0     10   0    0             @const1100
+0      8   0    0             @const1101
+0     14   0    0             @const1102
+0     12   0    0             @const1103
+0     12   0    0             @const1104
+0     10   0    0             @const1105
+0     12   0    0             @const1106
+0     10   0    0             @const1107
+0     16   0    0             @const1108
+0     14   0    0             @const1109
+0     16   0    0             @const1110
+0     14   0    0             @const1111
+0     10   0    0             @const1112
+0      8   0    0             @const1113
+0     20   0    0             @const1114
+0     18   0    0             @const1115
+0     16   0    0             @const1116
+0     14   0    0             @const1117
+0     16   0    0             @const1118
+0     14   0    0             @const1119
+0     18   0    0             @const1120
+0     16   0    0             @const1121
+0     14   0    0             @const1122
+0     12   0    0             @const1123
+0     12   0    0             @const1124
+0     10   0    0             @const1125
+0     10   0    0             @const1126
+0      8   0    0             @const1127
+0     12   0    0             @const1128
+0     10   0    0             @const1129
+0     16   0    0             @const1130
+0     14   0    0             @const1131
+0     16   0    0             @const1132
+0     14   0    0             @const1133
+0     32   0    0             @const1134
+0     30   0    0             @const1135
+0     16   0    0             @const1136
+0     14   0    0             @const1137
+0     14   0    0             @const1138
+0     12   0    0             @const1139
+0      8   0    0             @const1140
+0      6   0    0             @const1141
+0     10   0    0             @const1142
+0      8   0    0             @const1143
+0    224   1    5    949  5.4  Digipeter_ON
+0     26   0    0             @const1148
+0     36   0    0             @const1150
+0    198   1    5    903  5.3  Digipeter_OFF
+0     36   0    0             @const1156
+0    224   1    5    949  5.4  STORE_AND_FORWARD_ON
+0     32   0    0             @const1161
+0     42   0    0             @const1163
+0    492   2   24    766  7.1  DATA_TRANSFER_IN_SNF_MODE
+0     30   0    0             @const1165
+0     92   0   14             @MUL3232
+0     24   0    0             @const1174
+0    364   2   21    613  6.6  DATA_TRANSFER_IN_DP_MODE
+0     28   0    0             @const1176
+0    222   1    5    857  5.3  Beacon_ON
+0     22   0    0             @const1185
+0     32   0    0             @const1187
+0    224   1    5    857  5.3  Beacon_OFF
+0     22   0    0             @const1192
+0     32   0    0             @const1194
+0    328   2    3   1008  5.4  DATA_SECTORS_ERASE
+0     18   0    0             @const1197
+0     32   0    0             @const1199
+0     14   0    0             @const1201
+0    132   1    1    226  3.2  Setting
+0    550   3    2    789  6.1  MAIN
+0     16   0    0             @const1209
+0     28   0    0             @const1210
+ Inline         0             @cinit1
+
+Program metrics:
+    Functions               24
+    Statements              596
+    Comments                493
+    Volume (V)              29730
+    Difficulty (D)          116.9
+    Effort to implement (E) 3474935
+    Time to implement (T)   53 hours, 38 minutes
+    Est Delivered Bugs (B)  8
+    Cyclomatic Complexity   74
+    Maintainability (MI)    115
+
+ Segment     Used  Free
+-----------  ----  ----
+00000-00004     6  0  
+00006-00006     0  2  
+00008-000C8   194  0  
+000CA-0FFFE  10032  55302  
+10000-1FFEE     0  65520  
+
+
+

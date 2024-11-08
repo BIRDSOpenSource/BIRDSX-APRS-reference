@@ -1,0 +1,5 @@
+Compiling D:\OneDrive - Kyushu Institute Of Technolgy\BIRDS-X\00_open_source_birds_X\APRS_reference\software\PIC\Main on 08-Nov-24 at 02:25
+*** Error 12 "D:\OneDrive - Kyushu Institute Of Technolgy\BIRDS-X\00_open_source_birds_X\APRS_reference\software\PIC\Main.c" Line 88(19,20): Undefined identifier  -- Beacon_ON
+*** Error 12 "D:\OneDrive - Kyushu Institute Of Technolgy\BIRDS-X\00_open_source_birds_X\APRS_reference\software\PIC\Main.c" Line 89(20,21): Undefined identifier  -- Beacon_OFF
+      2 Errors,  0 Warnings.
+Build Failed.
