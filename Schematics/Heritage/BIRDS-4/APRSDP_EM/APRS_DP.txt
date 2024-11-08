@@ -1,0 +1,49 @@
+Partlist exported from C:/Users/mpsejera/Google Drive/BIRDS4/BIRDS4_Satellite/BIRDS4_Missions/APRSDP/APRSDP_EM/APRS_DP.sch at 26 Mar 2019 2:11 PM
+
+Part         Value          Device         Package Description                                                       MF MPN            OC_FARNELL OC_NEWARK SPICEMODEL SPICEPREFIX
+APRRS_MCU    ATMEGA644-20PU ATMEGA644-20PU DIL40   8-bit Microcontroller with 64K Bytes In-System Programmable Flash    ATMEGA644-20PU 1288340    23M5060                         
+BIM1H(TRX1)1 BIM1H          BIM1H          BIM1H                                                                                                                                  
+C1           0.1u           C              C0805   CAPACITOR, European symbol                                                                               NONE       C          
+C2           0.1u           C              C0805   CAPACITOR, European symbol                                                                               NONE       C          
+C3           1u             C              C0805   CAPACITOR, European symbol                                                                               NONE       C          
+C4           18p            C              C0805   CAPACITOR, European symbol                                                                               NONE       C          
+C5           18p            C              C0805   CAPACITOR, European symbol                                                                               NONE       C          
+C6           0.1u           C              C0805   CAPACITOR, European symbol                                                                               NONE       C          
+C7           0.1u           C              C0805   CAPACITOR, European symbol                                                                               NONE       C          
+C8           2.2n           C              C0805   CAPACITOR, European symbol                                                                               NONE       C          
+C9           0.1u           C              C0805   CAPACITOR, European symbol                                                                               NONE       C          
+C10          1u             C              C0805   CAPACITOR, European symbol                                                                               NONE       C          
+C11          0.1u           C              C0805   CAPACITOR, European symbol                                                                               NONE       C          
+C12          0.1u           C              C0805   CAPACITOR, European symbol                                                                               NONE       C          
+C13          0.1u           C              C0805   CAPACITOR, European symbol                                                                               NONE       C          
+C14          1u             C              C0805   CAPACITOR, European symbol                                                                               NONE       C          
+C15          0.1u           C              C0805   CAPACITOR, European symbol                                                                               NONE       C          
+D1_RED                      LEDSML0805     SML0805 LED                                                                                                                            
+D2_GRN                      LEDSML0805     SML0805 LED                                                                                                                            
+D3_YLW                      LEDSML0805     SML0805 LED                                                                                                                            
+D4_BLU                      LEDSML0805     SML0805 LED                                                                                                                            
+JP1                         PINHD-2X5      2X05    PIN HEADER                                                                                                                     
+L1           10uH           L-USL2012C     L2012C  INDUCTOR, American symbol                                                                                           L          
+OPAMP        MCP602SN       MCP602SN       SO08    Single Op Amp 2.7V to 6.0V Single Supply CMOS                                                                                  
+R1           1k             R-US_R0805     R0805   RESISTOR, American symbol                                                                                           R          
+R2           1k             R-US_R0805     R0805   RESISTOR, American symbol                                                                                           R          
+R3           1k             R-US_R0805     R0805   RESISTOR, American symbol                                                                                           R          
+R4           10k            R-US_R0805     R0805   RESISTOR, American symbol                                                                                           R          
+R5           330            R-US_R0805     R0805   RESISTOR, American symbol                                                                                           R          
+R6           330            R-US_R0805     R0805   RESISTOR, American symbol                                                                                           R          
+R7           4.4k           R-US_R0805     R0805   RESISTOR, American symbol                                                                                           R          
+R8           10k            TRIM_US-3223W  3223W   POTENTIOMETER                                                                                                                  
+R9           15k            R-US_R0805     R0805   RESISTOR, American symbol                                                                                           R          
+R10          47k            R-US_R0805     R0805   RESISTOR, American symbol                                                                                           R          
+R11          5.1k           R-US_R0805     R0805   RESISTOR, American symbol                                                                                           R          
+R12          120k           R-US_R0805     R0805   RESISTOR, American symbol                                                                                           R          
+R13          200k           R-US_R0805     R0805   RESISTOR, American symbol                                                                                           R          
+R14          50k            R-US_R0805     R0805   RESISTOR, American symbol                                                                                           R          
+R15          1k             R-US_R0805     R0805   RESISTOR, American symbol                                                                                           R          
+R16          220k           R-US_R0805     R0805   RESISTOR, American symbol                                                                                           R          
+R17          220k           R-US_R0805     R0805   RESISTOR, American symbol                                                                                           R          
+R18          10k            R-US_R0805     R0805   RESISTOR, American symbol                                                                                           R          
+R19          2.2k           R-US_R0805     R0805   RESISTOR, American symbol                                                                                           R          
+R21          2.2k           R-US_R0805     R0805   RESISTOR, American symbol                                                                                           R          
+R44          220k           R-US_R0805     R0805   RESISTOR, American symbol                                                                                           R          
+XTAL1        20MHZ          CRYSTALSM49    SM49    CRYSTAL                                                                             unknown    unknown                         
